@@ -1,9 +1,9 @@
 # CraftEngine Host Extension
 
-### Added gitlab hosting and github hosting
+### Added gitee hosting and github hosting
 
 ```yml
-# gitlab Example
+# gitee Example
 use-environment-variables: false
 type: "gtemc:gitee"
 owner: "your_owner_name"
