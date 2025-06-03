@@ -23,7 +23,7 @@ path: "resourcepacks/resource_pack.zip"
 ```yml
 # github Example
 use-environment-variables: false
-type: "gtemc:gitee"
+type: "gtemc:github"
 owner: "your_owner_name"
 repo: "your_repo_name" # https://github.com/new
 token: "your_token" # https://github.com/settings/tokens/new
