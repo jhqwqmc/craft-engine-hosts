@@ -1,5 +1,5 @@
 name: craftengine-hosts
-version: '0.0.1'
+version: '0.0.2'
 main: cn.gtemc.craftengine.CraftengineHosts
 api-version: '1.20'
 author: 'jhqwqmc'

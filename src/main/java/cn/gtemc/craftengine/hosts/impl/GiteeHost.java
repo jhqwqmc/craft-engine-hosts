@@ -125,8 +125,8 @@ public class GiteeHost implements ResourcePackHost {
     }
 
     private void readCacheFromDisk() {
-        Path cachePath = CraftengineHosts.instance().dataFolderPath().resolve("gitee.cache");
-        if (!Files.exists(cachePath)) return;
+        Path cachePath = CraftengineHosts.instance().dataFolderPath().resolve("cache").resolve("gitee.json");
+        if (!Files.exists(cachePath) || !Files.isRegularFile(cachePath)) return;
 
         try (InputStream is = Files.newInputStream(cachePath)) {
             Map<String, String> cache = GsonHelper.get().fromJson(
@@ -146,9 +146,9 @@ public class GiteeHost implements ResourcePackHost {
         Map<String, String> cache = new HashMap<>();
         cache.put("sha1", this.cachedSha1 != null ? this.cachedSha1 : "");
         cache.put("download_url", this.downloadUrl != null ? this.downloadUrl : "");
-
-        Path cachePath = CraftengineHosts.instance().dataFolderPath().resolve("gitee.cache");
+        Path cachePath = CraftengineHosts.instance().dataFolderPath().resolve("cache").resolve("gitee.json");
         try {
+            Files.createDirectories(cachePath.getParent());
             Files.writeString(
                     cachePath,
                     GsonHelper.get().toJson(cache),
