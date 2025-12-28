@@ -10,7 +10,7 @@ import com.google.gson.reflect.TypeToken;
 import net.momirealms.craftengine.core.pack.host.ResourcePackDownloadData;
 import net.momirealms.craftengine.core.pack.host.ResourcePackHost;
 import net.momirealms.craftengine.core.pack.host.ResourcePackHostFactory;
-import net.momirealms.craftengine.core.util.Key;
+import net.momirealms.craftengine.core.pack.host.ResourcePackHostType;
 import net.momirealms.craftengine.core.util.MiscUtils;
 
 import java.io.IOException;
@@ -29,7 +29,7 @@ import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
 public class GitHubHost implements ResourcePackHost {
-    public static final Factory FACTORY = new Factory();
+    public static final ResourcePackHostFactory<GitHubHost> FACTORY = new Factory();
     private static final String GITHUB_API = "https://api.github.com";
     private final String owner;
     private final String repo;
@@ -172,13 +172,13 @@ public class GitHubHost implements ResourcePackHost {
     }
 
     @Override
-    public Key type() {
+    public ResourcePackHostType<GitHubHost> type() {
         return ResourcePackHosts.GITHUB;
     }
 
-    public static class Factory implements ResourcePackHostFactory {
+    private static class Factory implements ResourcePackHostFactory<GitHubHost> {
         @Override
-        public ResourcePackHost create(Map<String, Object> arguments) {
+        public GitHubHost create(Map<String, Object> arguments) {
             boolean useEnv = (boolean) arguments.getOrDefault("use-environment-variables", false);
             String owner = arguments.get("owner").toString();
             if (owner == null || owner.isEmpty()) {

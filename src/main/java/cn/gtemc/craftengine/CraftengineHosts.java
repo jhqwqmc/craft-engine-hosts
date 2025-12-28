@@ -12,7 +12,7 @@ public final class CraftengineHosts extends JavaPlugin {
     @Override
     public void onLoad() {
         instance = this;
-        ResourcePackHosts.load();
+        ResourcePackHosts.init();
         getLogger().info("CraftEngine Hosts Extensions Loaded");
     }
 

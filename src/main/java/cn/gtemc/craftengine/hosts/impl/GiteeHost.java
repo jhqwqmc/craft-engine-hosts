@@ -10,7 +10,7 @@ import com.google.gson.reflect.TypeToken;
 import net.momirealms.craftengine.core.pack.host.ResourcePackDownloadData;
 import net.momirealms.craftengine.core.pack.host.ResourcePackHost;
 import net.momirealms.craftengine.core.pack.host.ResourcePackHostFactory;
-import net.momirealms.craftengine.core.util.Key;
+import net.momirealms.craftengine.core.pack.host.ResourcePackHostType;
 import net.momirealms.craftengine.core.util.MiscUtils;
 
 import java.io.IOException;
@@ -29,7 +29,7 @@ import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
 public class GiteeHost implements ResourcePackHost {
-    public static final Factory FACTORY = new Factory();
+    public static final ResourcePackHostFactory<GiteeHost> FACTORY = new Factory();
     private static final String GITEE_API = "https://gitee.com/api/v5";
     private final String owner;
     private final String repo;
@@ -167,13 +167,13 @@ public class GiteeHost implements ResourcePackHost {
     }
 
     @Override
-    public Key type() {
+    public ResourcePackHostType<GiteeHost> type() {
         return ResourcePackHosts.GITEE;
     }
 
-    public static class Factory implements ResourcePackHostFactory {
+    private static class Factory implements ResourcePackHostFactory<GiteeHost> {
         @Override
-        public ResourcePackHost create(Map<String, Object> arguments) {
+        public GiteeHost create(Map<String, Object> arguments) {
             boolean useEnv = (boolean) arguments.getOrDefault("use-environment-variables", false);
             String owner = arguments.get("owner").toString();
             if (owner == null || owner.isEmpty()) {

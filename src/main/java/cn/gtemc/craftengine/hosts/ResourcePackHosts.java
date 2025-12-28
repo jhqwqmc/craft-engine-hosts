@@ -2,7 +2,9 @@ package cn.gtemc.craftengine.hosts;
 
 import cn.gtemc.craftengine.hosts.impl.GitHubHost;
 import cn.gtemc.craftengine.hosts.impl.GiteeHost;
+import net.momirealms.craftengine.core.pack.host.ResourcePackHost;
 import net.momirealms.craftengine.core.pack.host.ResourcePackHostFactory;
+import net.momirealms.craftengine.core.pack.host.ResourcePackHostType;
 import net.momirealms.craftengine.core.registry.BuiltInRegistries;
 import net.momirealms.craftengine.core.registry.Registries;
 import net.momirealms.craftengine.core.registry.WritableRegistry;
@@ -10,16 +12,16 @@ import net.momirealms.craftengine.core.util.Key;
 import net.momirealms.craftengine.core.util.ResourceKey;
 
 public class ResourcePackHosts {
-    public static final Key GITHUB = Key.of("gtemc:github");
-    public static final Key GITEE = Key.of("gtemc:gitee");
+    public static final ResourcePackHostType<GitHubHost> GITHUB = register(Key.of("gtemc:github"), GitHubHost.FACTORY);
+    public static final ResourcePackHostType<GiteeHost> GITEE = register(Key.of("gtemc:gitee"), GiteeHost.FACTORY);
 
-    public static void load() {
-        register(GITHUB, GitHubHost.FACTORY);
-        register(GITEE, GiteeHost.FACTORY);
+    public static void init() {
     }
 
-    private static void register(Key key, ResourcePackHostFactory factory) {
-        ((WritableRegistry<ResourcePackHostFactory>) BuiltInRegistries.RESOURCE_PACK_HOST_FACTORY)
-                .register(ResourceKey.create(Registries.RESOURCE_PACK_HOST_FACTORY.location(), key), factory);
+    private static <T extends ResourcePackHost> ResourcePackHostType<T> register(Key key, ResourcePackHostFactory<T> factory) {
+        ResourcePackHostType<T> type = new ResourcePackHostType<>(key, factory);
+        ((WritableRegistry<ResourcePackHostType<? extends ResourcePackHost>>) BuiltInRegistries.RESOURCE_PACK_HOST_TYPE)
+                .register(ResourceKey.create(Registries.RESOURCE_PACK_HOST_TYPE.location(), key), type);
+        return type;
     }
 }
