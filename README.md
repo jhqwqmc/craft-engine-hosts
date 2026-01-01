@@ -32,3 +32,12 @@ path: "resourcepacks/resource_pack.zip"
 ```
 > [!TIP]
 > Available environment variables: CE_GITHUB_TOKEN
+
+```yml
+use-environment-variables: false
+type: "gtemc:polymath"
+server-url: "https://your_server_url/upload"
+secret: "your_secret"
+```
+> [!TIP]
+> Available environment variables: CE_POLYMATH_SECRET

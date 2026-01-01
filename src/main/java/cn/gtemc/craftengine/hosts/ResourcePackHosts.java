@@ -2,6 +2,7 @@ package cn.gtemc.craftengine.hosts;
 
 import cn.gtemc.craftengine.hosts.impl.GitHubHost;
 import cn.gtemc.craftengine.hosts.impl.GiteeHost;
+import cn.gtemc.craftengine.hosts.impl.PolymathHost;
 import net.momirealms.craftengine.core.pack.host.ResourcePackHost;
 import net.momirealms.craftengine.core.pack.host.ResourcePackHostFactory;
 import net.momirealms.craftengine.core.pack.host.ResourcePackHostType;
@@ -14,6 +15,7 @@ import net.momirealms.craftengine.core.util.ResourceKey;
 public class ResourcePackHosts {
     public static final ResourcePackHostType<GitHubHost> GITHUB = register(Key.of("gtemc:github"), GitHubHost.FACTORY);
     public static final ResourcePackHostType<GiteeHost> GITEE = register(Key.of("gtemc:gitee"), GiteeHost.FACTORY);
+    public static final ResourcePackHostType<PolymathHost> POLYMATH = register(Key.of("gtemc:polymath"), PolymathHost.FACTORY);
 
     public static void init() {
     }
