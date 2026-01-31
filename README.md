@@ -6,38 +6,40 @@
 > 
 > 请勿滥用示例的托管方式服务，严格遵守Gitee和GitHub的服务条款。如需大量分发资源包，请使用[S3托管](https://ce.gtemc.cn/zh-Hans/getting_start/set_up_host/s3)。使用过程中出现的任何问题（包括因滥用导致的问题）均由使用者自行承担全部责任。本项目开发者特此声明：对于因滥用、不当配置或违反平台条款所引发的任何后果概不负责。使用者应确保其使用行为符合所有适用法律法规及第三方服务协议的要求。
 
-### Added gitee hosting and github hosting
+### gitee example
 
 ```yml
-# gitee Example
-use-environment-variables: false
 type: "gtemc:gitee"
 owner: "your_owner_name"
 repo: "your_repo_name" # https://gitee.com/projects/new
 token: "your_token" # https://gitee.com/profile/personal_access_tokens/new
 path: "resourcepacks/resource_pack.zip"
+use-environment-variables: false
 ```
 > [!TIP]
 > Available environment variables: CE_GITEE_TOKEN
 
+### github example
+
 ```yml
-# github Example
-use-environment-variables: false
 type: "gtemc:github"
 owner: "your_owner_name"
 repo: "your_repo_name" # https://github.com/new
 token: "your_token" # https://github.com/settings/tokens/new
 branch: "main"
 path: "resourcepacks/resource_pack.zip"
+use-environment-variables: false
 ```
 > [!TIP]
 > Available environment variables: CE_GITHUB_TOKEN
 
+### polymath example
+
 ```yml
-use-environment-variables: false
 type: "gtemc:polymath"
 server-url: "https://your_server_url/upload"
 secret: "your_secret"
+use-environment-variables: false
 ```
 > [!TIP]
 > Available environment variables: CE_POLYMATH_SECRET
