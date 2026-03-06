@@ -4,7 +4,7 @@ plugins {
 }
 
 group = 'cn.gtemc'
-version = '0.1'
+version = '26.3'
 
 repositories {
     mavenCentral()
@@ -28,8 +28,8 @@ repositories {
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.20.1-R0.1-SNAPSHOT")
-    compileOnly("net.momirealms:craft-engine-core:0.0.67.6.8-20260305.073652-3")
-    compileOnly("net.momirealms:craft-engine-bukkit:0.0.67.6.8-20260305.073652-3")
+    compileOnly("net.momirealms:craft-engine-core:26.3-SNAPSHOT")
+    compileOnly("net.momirealms:craft-engine-bukkit:26.3-SNAPSHOT")
     compileOnly("com.google.code.gson:gson:2.13.2")
 }
 
