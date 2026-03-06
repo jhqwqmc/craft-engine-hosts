@@ -12,7 +12,7 @@ import net.momirealms.craftengine.core.pack.host.ResourcePackDownloadData;
 import net.momirealms.craftengine.core.pack.host.ResourcePackHost;
 import net.momirealms.craftengine.core.pack.host.ResourcePackHostFactory;
 import net.momirealms.craftengine.core.pack.host.ResourcePackHostType;
-import net.momirealms.craftengine.core.util.MiscUtils;
+import net.momirealms.craftengine.core.plugin.config.ConfigSection;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -162,18 +162,15 @@ public class PolymathHost implements ResourcePackHost {
     }
 
     private static class Factory implements ResourcePackHostFactory<PolymathHost> {
+        private static final String[] USE_ENVIRONMENT_VARIABLES = new String[]{"use_environment_variables", "use-environment-variables"};
+        private static final String[] SERVER_URL = new String[]{"server_url", "server-url"};
+
         @Override
-        public PolymathHost create(Map<String, Object> arguments) {
-            boolean useEnv = (boolean) arguments.getOrDefault("use-environment-variables", false);
-            String serverUrl = Optional.ofNullable(arguments.get("server-url")).map(String::valueOf).orElse(null);
-            if (serverUrl == null || serverUrl.isEmpty()) {
-                throw new IllegalArgumentException("[Polymath] Missing required 'server-url' argument for polymath host.");
-            }
-            String secret = useEnv ? System.getenv("CE_POLYMATH_SECRET") : Optional.ofNullable(arguments.get("secret")).map(String::valueOf).orElse(null);
-            if (secret == null || secret.isEmpty()) {
-                throw new IllegalArgumentException("[Polymath] Missing required 'secret' argument for polymath host.");
-            }
-            ProxySelector proxy = getProxySelector(MiscUtils.castToMap(arguments.get("proxy"), true));
+        public PolymathHost create(ConfigSection section) {
+            boolean useEnv = section.getBoolean(USE_ENVIRONMENT_VARIABLES);
+            String serverUrl = section.getNonEmptyString(SERVER_URL);
+            String secret = useEnv ? getNonNullEnvironmentVariable(section, "CE_POLYMATH_SECRET") : section.getNonEmptyString("secret");
+            ProxySelector proxy = getProxySelector(section.getSection("proxy"));
             return new PolymathHost(serverUrl, secret, proxy);
         }
     }

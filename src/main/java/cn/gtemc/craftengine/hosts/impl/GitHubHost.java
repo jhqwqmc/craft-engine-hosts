@@ -11,7 +11,8 @@ import net.momirealms.craftengine.core.pack.host.ResourcePackDownloadData;
 import net.momirealms.craftengine.core.pack.host.ResourcePackHost;
 import net.momirealms.craftengine.core.pack.host.ResourcePackHostFactory;
 import net.momirealms.craftengine.core.pack.host.ResourcePackHostType;
-import net.momirealms.craftengine.core.util.MiscUtils;
+import net.momirealms.craftengine.core.plugin.config.ConfigSection;
+import net.momirealms.craftengine.core.plugin.config.ConfigValue;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -177,30 +178,17 @@ public class GitHubHost implements ResourcePackHost {
     }
 
     private static class Factory implements ResourcePackHostFactory<GitHubHost> {
+        private static final String[] USE_ENVIRONMENT_VARIABLES = new String[]{"use_environment_variables", "use-environment-variables"};
+
         @Override
-        public GitHubHost create(Map<String, Object> arguments) {
-            boolean useEnv = (boolean) arguments.getOrDefault("use-environment-variables", false);
-            String owner = arguments.get("owner").toString();
-            if (owner == null || owner.isEmpty()) {
-                throw new IllegalArgumentException("[GitHub] Missing required 'owner' argument for github host.");
-            }
-            String repo = arguments.get("repo").toString();
-            if (repo == null || repo.isEmpty()) {
-                throw new IllegalArgumentException("[GitHub] Missing required 'repo' argument for github host.");
-            }
-            String token = useEnv ? System.getenv("CE_GITHUB_TOKEN") : arguments.get("token").toString();
-            if (token == null || token.isEmpty()) {
-                throw new IllegalArgumentException("[GitHub] Missing required 'token' argument for github host.");
-            }
-            String branch = arguments.getOrDefault("branch", "main").toString();
-            if (branch == null || branch.isEmpty()) {
-                throw new IllegalArgumentException("[GitHub] Missing required 'branch' argument for github host.");
-            }
-            String uploadPath = arguments.get("path").toString();
-            if (uploadPath == null || uploadPath.isEmpty()) {
-                throw new IllegalArgumentException("[GitHub] Missing required 'path' argument for github host.");
-            }
-            ProxySelector proxy = getProxySelector(MiscUtils.castToMap(arguments.get("proxy"), true));
+        public GitHubHost create(ConfigSection section) {
+            boolean useEnv = section.getBoolean(USE_ENVIRONMENT_VARIABLES);
+            String owner = section.getNonEmptyString("owner");
+            String repo = section.getNonEmptyString("repo");
+            String token = useEnv ? getNonNullEnvironmentVariable(section, "CE_GITHUB_TOKEN") : section.getNonEmptyString("token");
+            String branch = section.getValue("branch", ConfigValue::getAsNonEmptyString, "main");
+            String uploadPath = section.getNonEmptyString("path");
+            ProxySelector proxy = getProxySelector(section.getSection("proxy"));
             return new GitHubHost(owner, repo, token, branch, uploadPath, proxy);
         }
     }

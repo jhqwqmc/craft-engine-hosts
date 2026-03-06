@@ -11,7 +11,7 @@ import net.momirealms.craftengine.core.pack.host.ResourcePackDownloadData;
 import net.momirealms.craftengine.core.pack.host.ResourcePackHost;
 import net.momirealms.craftengine.core.pack.host.ResourcePackHostFactory;
 import net.momirealms.craftengine.core.pack.host.ResourcePackHostType;
-import net.momirealms.craftengine.core.util.MiscUtils;
+import net.momirealms.craftengine.core.plugin.config.ConfigSection;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -172,26 +172,16 @@ public class GiteeHost implements ResourcePackHost {
     }
 
     private static class Factory implements ResourcePackHostFactory<GiteeHost> {
+        private static final String[] USE_ENVIRONMENT_VARIABLES = new String[]{"use_environment_variables", "use-environment-variables"};
+
         @Override
-        public GiteeHost create(Map<String, Object> arguments) {
-            boolean useEnv = (boolean) arguments.getOrDefault("use-environment-variables", false);
-            String owner = arguments.get("owner").toString();
-            if (owner == null || owner.isEmpty()) {
-                throw new IllegalArgumentException("[Gitee] Missing required 'owner' argument for gitee host.");
-            }
-            String repo = arguments.get("repo").toString();
-            if (repo == null || repo.isEmpty()) {
-                throw new IllegalArgumentException("[Gitee] Missing required 'repo' argument for gitee host.");
-            }
-            String token = useEnv ? System.getenv("CE_GITEE_TOKEN") : arguments.get("token").toString();
-            if (token == null || token.isEmpty()) {
-                throw new IllegalArgumentException("[Gitee] Missing required 'token' argument for gitee host.");
-            }
-            String uploadPath = arguments.get("path").toString();
-            if (uploadPath == null || uploadPath.isEmpty()) {
-                throw new IllegalArgumentException("[Gitee] Missing required 'path' argument for gitee host.");
-            }
-            ProxySelector proxy = getProxySelector(MiscUtils.castToMap(arguments.get("proxy"), true));
+        public GiteeHost create(ConfigSection section) {
+            boolean useEnv = section.getBoolean(USE_ENVIRONMENT_VARIABLES);
+            String owner = section.getNonEmptyString("owner");
+            String repo = section.getNonEmptyString("repo");
+            String token = useEnv ? getNonNullEnvironmentVariable(section, "CE_GITEE_TOKEN") : section.getNonEmptyString("token");
+            String uploadPath = section.getNonEmptyString("path");
+            ProxySelector proxy = getProxySelector(section.getSection("proxy"));
             return new GiteeHost(owner, repo, token, uploadPath, proxy);
         }
     }
